@@ -1,7 +1,9 @@
 import {TimeStampModelClass} from "./db";
 import {TimeStampType} from "../types/types";
 import {sub} from "date-fns";
+import {injectable} from "inversify";
 
+@injectable()
 export class TimeStampsRepository {
 
     async add(newTimeStamp: TimeStampType): Promise<boolean> {

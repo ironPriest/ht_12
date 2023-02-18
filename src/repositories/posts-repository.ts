@@ -1,6 +1,8 @@
+import {injectable} from "inversify";
 import {PostType} from "../types/types";
 import {PostModelClass} from "./db";
 
+@injectable()
 export class PostsRepository {
 
     async getPosts(

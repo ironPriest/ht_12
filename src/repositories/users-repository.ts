@@ -1,8 +1,9 @@
 import {UserType} from "../types/types";
 import {UserModelClass} from "./db";
 import {ObjectId} from "mongodb";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class UsersRepository {
     async create(newUser: UserType): Promise<UserType> {
 
@@ -12,6 +13,7 @@ export class UsersRepository {
 
         return newUser
     }
+
     async newPassword(id: string, passwordHash: string) {
 
         const userInstance = await UserModelClass.findOne({id})
@@ -22,15 +24,19 @@ export class UsersRepository {
 
         return true
     }
+
     async findByLoginOrEmail(loginOrEmail: string) {
         return UserModelClass.findOne({ $or: [{email: loginOrEmail}, {login: loginOrEmail}]}).lean()
     }
+
     async findById(id: ObjectId) {
         return UserModelClass.findOne({_id: id}).lean()
     }
+
     async findByEmail(email: string): Promise<UserType | null> {
         return UserModelClass.findOne({email: email}).lean()
     }
+
     async getUsers(
         searchLoginTerm: string | undefined,
         searchEmailTerm: string | undefined,
@@ -71,6 +77,7 @@ export class UsersRepository {
             "items": await query
         }
     }
+
     async delete(id: string) {
 
         const userInstance = await UserModelClass.findOne({id})
@@ -80,7 +87,9 @@ export class UsersRepository {
         return true
 
     }
+
     async deleteAll() {
         await UserModelClass.deleteMany()
     }
+
 }

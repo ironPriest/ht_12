@@ -4,14 +4,16 @@ import {DeviceAuthSessionsRepository} from "../repositories/device-auth-sessions
 import {DeviceAuthSessionsService} from "../domain/device-auth-sessions-service";
 import {Request, Response} from "express";
 import {TokenType} from "../types/types";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class SecurityDevicesController {
 
     constructor(
-        protected jwtUtility: JwtUtility,
-        protected blackTokensRepository: BlacktokensRepository,
-        protected deviceAuthSessionsRepository: DeviceAuthSessionsRepository,
-        protected deviceAuthSessionsService: DeviceAuthSessionsService
+        @inject(JwtUtility) protected jwtUtility: JwtUtility,
+        @inject(BlacktokensRepository) protected blackTokensRepository: BlacktokensRepository,
+        @inject(DeviceAuthSessionsRepository) protected deviceAuthSessionsRepository: DeviceAuthSessionsRepository,
+        @inject(DeviceAuthSessionsService) protected deviceAuthSessionsService: DeviceAuthSessionsService
     ) {
     }
 

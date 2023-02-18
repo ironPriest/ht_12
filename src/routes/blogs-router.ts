@@ -1,14 +1,16 @@
-import {Router} from "express";
+import {container} from "../composition-root";
 import {BlogsService} from "../domain/blogs-service";
+import {BlogsController} from "./blogs-controller";
+import {Router} from "express";
 import {body, param} from "express-validator";
 import {inputValidationMiddleware, requestsCounterMiddleware} from "../middlewares/input-validation-middleware";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {contentValidation, descValidation, titleValidation} from "./posts-router";
-import {BlogsRepository} from "../repositories/blogs-repository";
-import {blogsController} from "../composition-root";
+
+const blogsController = container.resolve(BlogsController)
+const blogsService = container.resolve(BlogsService)
 
 export const blogsRouter = Router({})
-
 
 blogsRouter.use(requestsCounterMiddleware)
 
@@ -27,11 +29,6 @@ const youtubeUrlValidation = body('websiteUrl')
     .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
 
 const bloggerIdValidation = param('blogId').custom(async (blogId, ) => {
-
-    //todo how it's better to deal with blogService instance (blogsRouter)
-    let blogsRepository = new BlogsRepository();
-    let blogsService = new BlogsService(blogsRepository)
-
     const blog = await blogsService.getBlogById(blogId)
     if (!blog) {
         throw new Error('such blog doesnt exist')

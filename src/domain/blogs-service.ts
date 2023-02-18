@@ -2,10 +2,15 @@ import {BlogType} from "../types/types";
 import {ObjectId} from "mongodb";
 import {BlogsRepository} from "../repositories/blogs-repository"
 import {v4} from 'uuid';
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class BlogsService {
 
-    constructor(protected blogsRepository: BlogsRepository) {}
+    constructor(
+        @inject(BlogsRepository) protected blogsRepository: BlogsRepository
+    ) {
+    }
 
 
     async getBlogs(

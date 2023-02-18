@@ -3,8 +3,9 @@ import {ObjectId} from "mongodb";
 import {validationResult} from "express-validator";
 import {TimeStampsRepository} from "../repositories/time-stamps-repository";
 import {TimeStampType} from "../types/types";
+import {container} from "../composition-root";
 
-const timeStampsRepository = new TimeStampsRepository()
+const timeStampsRepository = container.resolve(TimeStampsRepository)
 
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);

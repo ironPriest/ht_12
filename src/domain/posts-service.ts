@@ -3,13 +3,14 @@ import {PostsRepository} from "../repositories/posts-repository";
 import {v4} from "uuid";
 import {ObjectId} from "mongodb";
 import {BlogsRepository} from "../repositories/blogs-repository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class PostsService {
 
-
     constructor(
-        protected blogsRepository: BlogsRepository,
-        protected postsRepository: PostsRepository
+        @inject(BlogsRepository) protected blogsRepository: BlogsRepository,
+        @inject(PostsRepository) protected postsRepository: PostsRepository
     ) {
     }
 

@@ -3,12 +3,14 @@ import {UsersRepository} from "../repositories/users-repository";
 import {AuthService} from "./auth-service";
 import {v4} from "uuid";
 import {UserType} from "../types/types";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class UsersService {
 
     constructor(
-        protected usersRepository: UsersRepository,
-        protected authService: AuthService
+        @inject(UsersRepository) protected usersRepository: UsersRepository,
+        @inject(AuthService) protected authService: AuthService
     ) {
     }
 

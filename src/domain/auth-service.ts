@@ -7,15 +7,16 @@ import add from "date-fns/add"
 import {EmailconfirmationRepository} from "../repositories/emailconfirmation-repository";
 import {EmailService} from "./email-service";
 import {RecoveryCodesRepository} from "../repositories/recovery-codes-repository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class AuthService {
 
-
     constructor(
-        protected usersRepository: UsersRepository,
-        protected emailConfirmationRepository: EmailconfirmationRepository,
-        protected recoveryCodesRepository: RecoveryCodesRepository,
-        protected emailService: EmailService
+        @inject(UsersRepository) protected usersRepository: UsersRepository,
+        @inject(EmailconfirmationRepository) protected emailConfirmationRepository: EmailconfirmationRepository,
+        @inject(RecoveryCodesRepository) protected recoveryCodesRepository: RecoveryCodesRepository,
+        @inject(EmailService) protected emailService: EmailService
     ) {
     }
 

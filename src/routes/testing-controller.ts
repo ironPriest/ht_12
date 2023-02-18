@@ -9,20 +9,22 @@ import {TimeStampsRepository} from "../repositories/time-stamps-repository";
 import {RecoveryCodesRepository} from "../repositories/recovery-codes-repository";
 import {LikeStatusesRepository} from "../repositories/like-statuses-repository";
 import {Request, Response} from "express";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class TestingController {
 
     constructor(
-        protected blogsRepository: BlogsRepository,
-        protected postsRepository: PostsRepository,
-        protected usersRepository: UsersRepository,
-        protected commentsRepository: CommentsRepository,
-        protected emailConfirmationRepository: EmailconfirmationRepository,
-        protected blackTokensRepository: BlacktokensRepository,
-        protected deviceAuthSessionsRepository: DeviceAuthSessionsRepository,
-        protected timeStampsRepository: TimeStampsRepository,
-        protected recoveryCodesRepository: RecoveryCodesRepository,
-        protected likeStatusesRepository: LikeStatusesRepository
+        @inject(BlogsRepository) protected blogsRepository: BlogsRepository,
+        @inject(PostsRepository) protected postsRepository: PostsRepository,
+        @inject(UsersRepository) protected usersRepository: UsersRepository,
+        @inject(CommentsRepository) protected commentsRepository: CommentsRepository,
+        @inject(EmailconfirmationRepository) protected emailConfirmationRepository: EmailconfirmationRepository,
+        @inject(BlacktokensRepository) protected blackTokensRepository: BlacktokensRepository,
+        @inject(DeviceAuthSessionsRepository) protected deviceAuthSessionsRepository: DeviceAuthSessionsRepository,
+        @inject(TimeStampsRepository) protected timeStampsRepository: TimeStampsRepository,
+        @inject(RecoveryCodesRepository) protected recoveryCodesRepository: RecoveryCodesRepository,
+        @inject(LikeStatusesRepository) protected likeStatusesRepository: LikeStatusesRepository
     ) {
     }
 

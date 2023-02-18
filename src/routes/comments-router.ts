@@ -4,7 +4,10 @@ import {commentValidation} from "./posts-router";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {userCheckMiddleware} from "../middlewares/user-check-middleware";
 import {body} from "express-validator";
-import {commentsController} from "../composition-root";
+import {container} from "../composition-root";
+import {CommentsController} from "./comments-controller";
+
+const commentsController = container.resolve(CommentsController)
 
 export const commentsRouter = Router({})
 

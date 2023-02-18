@@ -3,11 +3,13 @@ import jwt from 'jsonwebtoken'
 import {settings} from "../types/settings";
 import {ObjectId} from "mongodb";
 import {BlacktokensRepository} from "../repositories/blacktockens-repository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class JwtUtility {
 
     constructor(
-        protected blackTokensRepository: BlacktokensRepository
+        @inject(BlacktokensRepository) protected blackTokensRepository: BlacktokensRepository
     ) {
     }
 

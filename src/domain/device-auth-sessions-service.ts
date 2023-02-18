@@ -3,11 +3,13 @@ import {ObjectId} from "mongodb";
 import {v4} from "uuid";
 import add from "date-fns/add";
 import {DeviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class DeviceAuthSessionsService {
 
     constructor(
-        protected deviceAuthSessionsRepository: DeviceAuthSessionsRepository
+        @inject(DeviceAuthSessionsRepository) protected deviceAuthSessionsRepository: DeviceAuthSessionsRepository
     ) {
     }
 

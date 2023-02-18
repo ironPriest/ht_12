@@ -1,11 +1,13 @@
 import {LikeStatus} from "../types/types";
 import {ObjectId} from "mongodb";
 import {LikeStatusesRepository} from "../repositories/like-statuses-repository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class LikeStatusesService {
 
     constructor(
-        protected likeStatusesRepository: LikeStatusesRepository
+        @inject(LikeStatusesRepository) protected likeStatusesRepository: LikeStatusesRepository
     ) {
     }
 

@@ -1,12 +1,16 @@
+import {inject, injectable} from "inversify";
 import {PostsService} from "../domain/posts-service";
 import {BlogsService} from "../domain/blogs-service";
 import {Request, Response} from "express";
+import {BlogsRepository} from "../repositories/blogs-repository";
 
+
+@injectable()
 export class BlogsController {
 
     constructor(
-        protected blogsService: BlogsService,
-        protected postsService: PostsService
+        @inject(BlogsService) protected blogsService: BlogsService,
+        @inject(PostsService) protected postsService: PostsService
     ) {
     }
 
@@ -91,4 +95,5 @@ export class BlogsController {
             res.send(404)
         }
     }
+
 }

@@ -1,12 +1,14 @@
 import {CommentsService} from "../domain/comments-service";
 import {LikeStatusesService} from "../domain/like-statuses-service";
 import {Request, Response} from "express";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class CommentsController {
 
     constructor(
-        protected commentsService: CommentsService,
-        protected likesStatusesService: LikeStatusesService
+        @inject(CommentsService) protected commentsService: CommentsService,
+        @inject(LikeStatusesService) protected likesStatusesService: LikeStatusesService
     ) {
     }
 

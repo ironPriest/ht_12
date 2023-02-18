@@ -5,36 +5,15 @@ import {inputValidationMiddleware, rateLimiter} from "../middlewares/input-valid
 import {body} from "express-validator";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 import {RecoveryCodesRepository} from "../repositories/recovery-codes-repository";
-import {authController} from "../composition-root";
-import {UsersRepository} from "../repositories/users-repository";
-import {AuthService} from "../domain/auth-service";
-import {EmailService} from "../domain/email-service";
-import {EmailAdapter} from "../adapters/email-adapter";
-import {EmailManager} from "../managers/email-manager";
+import {container} from "../composition-root";
+import {AuthController} from "./auth-controller";
+
+const authController = container.resolve(AuthController)
+const usersService = container.resolve(UsersService)
+const emailConfirmationRepository = container.resolve(EmailconfirmationRepository)
+const recoveryCodesRepository = container.resolve(RecoveryCodesRepository)
 
 export const authRouter = Router({})
-
-//todo usersService instance creation for middlewares authRouter
-const usersRepository = new UsersRepository()
-const recoveryCodesRepository = new RecoveryCodesRepository()
-const emailConfirmationRepository = new EmailconfirmationRepository()
-const emailAdapter = new EmailAdapter()
-const emailManager = new EmailManager(
-    emailAdapter
-)
-const emailService = new EmailService(
-    emailManager
-)
-const authService = new AuthService(
-    usersRepository,
-    emailConfirmationRepository,
-    recoveryCodesRepository,
-    emailService
-)
-const usersService = new UsersService(
-    usersRepository,
-    authService
-)
 
 const loginValidation = body('login')
     .trim()

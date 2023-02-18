@@ -1,6 +1,8 @@
+import {injectable} from "inversify";
 import {BlogType} from "../types/types";
 import {BlogModelClass} from "./db";
 
+@injectable()
 export class BlogsRepository {
     async getBlogs(
         searchTerm: string | undefined,
@@ -45,9 +47,11 @@ export class BlogsRepository {
             "items": await query
         }
     }
+
     async getBlogById(blogId: string): Promise<BlogType | null> {
         return BlogModelClass.findOne({id: blogId}).lean()
     }
+
     async createBlog(newBlog: BlogType): Promise<BlogType> {
 
         const newBlogInstance = new BlogModelClass(newBlog)
@@ -56,6 +60,7 @@ export class BlogsRepository {
 
         return newBlog
     }
+
     async updateBlog(blogId: string, name: string, websiteUrl: string): Promise<boolean> {
 
         const blogInstance = await  BlogModelClass.findOne({id: blogId})
@@ -69,6 +74,7 @@ export class BlogsRepository {
         // let result = await BlogModelClass.updateOne({id: blogId}, {$set: {name, websiteUrl}})
         return  true
     }
+
     async deleteBlog(blogId: string): Promise<boolean> {
 
         const blogInstance = await  BlogModelClass.findOne({id: blogId})
@@ -79,7 +85,9 @@ export class BlogsRepository {
         //let result = await BlogModelClass.deleteOne({id: blogId})
         return true
     }
+
     async deleteAll() {
         await BlogModelClass.deleteMany()
     }
+
 }

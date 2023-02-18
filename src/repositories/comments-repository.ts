@@ -1,12 +1,14 @@
 import {CommentType} from "../types/types";
 import {CommentModelClass} from "./db";
 import {LikeStatusesRepository} from "./like-statuses-repository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class CommentsRepository {
 
-    likeStatusesRepository: LikeStatusesRepository;
-    constructor() {
-        this.likeStatusesRepository = new LikeStatusesRepository()
+    constructor(
+        @inject(LikeStatusesRepository) protected likeStatusesRepository: LikeStatusesRepository
+    ) {
     }
 
     async create(newComment: CommentType): Promise<boolean> {

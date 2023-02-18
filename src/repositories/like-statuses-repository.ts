@@ -1,7 +1,10 @@
-import {CommentModelClass, LikeStatusModelClass} from "./db";
+import {LikeStatusModelClass} from "./db";
 import {LikeStatus} from "../types/types";
+import {injectable} from "inversify";
 
+@injectable()
 export class LikeStatusesRepository {
+
     async create(newLikeStatus: LikeStatus): Promise<boolean> {
 
         const newLikeStatusInstance = new LikeStatusModelClass(newLikeStatus)
@@ -49,4 +52,5 @@ export class LikeStatusesRepository {
     async deleteAll() {
         await LikeStatusModelClass.deleteMany()
     }
+
 }

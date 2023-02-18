@@ -1,6 +1,8 @@
 import {EmailConfirmationType} from "../types/types";
 import {EmailConfirmationModelClass} from "./db";
+import {injectable} from "inversify";
 
+@injectable()
 export class EmailconfirmationRepository {
 
     async create(newEmailConformation: EmailConfirmationType): Promise<boolean> {

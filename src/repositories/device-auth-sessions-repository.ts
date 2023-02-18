@@ -1,8 +1,11 @@
 import {DeviceAuthSessionType} from "../types/types";
 import {DeviceAuthSessionModelClass} from "./db";
 import {ObjectId} from "mongodb";
+import {injectable} from "inversify";
 
+@injectable()
 export class DeviceAuthSessionsRepository {
+
     async create(deviceAuthSession: DeviceAuthSessionType): Promise<boolean> {
 
         const newDeviceAuthSessionInstance = new DeviceAuthSessionModelClass(deviceAuthSession)
@@ -11,6 +14,7 @@ export class DeviceAuthSessionsRepository {
 
         return  true
     }
+
     async update(deviceId: string, newLastActiveDate: string): Promise<boolean> {
 
         const deviceAuthSessionInstance = await DeviceAuthSessionModelClass.findOne({deviceId})
@@ -22,23 +26,29 @@ export class DeviceAuthSessionsRepository {
 
         return  true
     }
+
     async getSessionByUserId(userId: ObjectId): Promise<DeviceAuthSessionType | null> {
         return DeviceAuthSessionModelClass.findOne({userId}).lean()
     }
+
     async getSessionsByDeviceId(deviceId: string): Promise<DeviceAuthSessionType | null> {
         return DeviceAuthSessionModelClass.findOne({deviceId}).lean()
     }
+
     async check(userId: ObjectId, deviceId: string): Promise<DeviceAuthSessionType | null> {
         return  DeviceAuthSessionModelClass.findOne({userId, deviceId}).lean()
     }
+
     async getSessions(userId: ObjectId) {
         return DeviceAuthSessionModelClass.
         find({userId}).
         select('-_id -userId -rtExpDate')
     }
+
     async deleteAll() {
         await DeviceAuthSessionModelClass.deleteMany()
     }
+
     async deleteExcept(userId: ObjectId, deviceId: string) {
 
         await DeviceAuthSessionModelClass.
@@ -46,6 +56,7 @@ export class DeviceAuthSessionsRepository {
         where('userId').equals(userId).
         where('deviceId').ne(deviceId)
     }
+
     async deleteSession(deviceId: string, userId: ObjectId): Promise<Boolean> {
 
         const deviceAuthSessionInstance = await DeviceAuthSessionModelClass.findOne({deviceId, userId})
@@ -55,4 +66,5 @@ export class DeviceAuthSessionsRepository {
 
         return true
     }
+
 }

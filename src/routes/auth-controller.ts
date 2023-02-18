@@ -6,16 +6,18 @@ import {RecoveryCodesRepository} from "../repositories/recovery-codes-repository
 import {AuthService} from "../domain/auth-service";
 import {Request, Response} from "express";
 import {DeviceAuthSessionType, TokenType} from "../types/types";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class AuthController {
 
     constructor(
-        protected usersService: UsersService,
-        protected blackTokensRepository: BlacktokensRepository,
-        protected jwtUtility: JwtUtility,
-        protected deviceAuthSessionsService: DeviceAuthSessionsService,
-        protected recoveryCodesRepository: RecoveryCodesRepository,
-        protected authService: AuthService
+        @inject(UsersService) protected usersService: UsersService,
+        @inject(BlacktokensRepository) protected blackTokensRepository: BlacktokensRepository,
+        @inject(JwtUtility) protected jwtUtility: JwtUtility,
+        @inject(DeviceAuthSessionsService) protected deviceAuthSessionsService: DeviceAuthSessionsService,
+        @inject(RecoveryCodesRepository) protected recoveryCodesRepository: RecoveryCodesRepository,
+        @inject(AuthService) protected authService: AuthService
     ) {
     }
 

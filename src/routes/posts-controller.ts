@@ -2,12 +2,14 @@ import {PostsService} from "../domain/posts-service";
 import {CommentsService} from "../domain/comments-service";
 import {Request, Response} from "express";
 import {PostModelClass} from "../repositories/db";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class PostsController {
 
     constructor(
-        protected postsService: PostsService,
-        protected commentsService: CommentsService
+        @inject(PostsService) protected postsService: PostsService,
+        @inject(CommentsService) protected commentsService: CommentsService
     ) {
     }
 

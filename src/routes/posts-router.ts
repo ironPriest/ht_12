@@ -5,9 +5,11 @@ import {inputValidationMiddleware} from "../middlewares/input-validation-middlew
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 import {userCheckMiddleware} from "../middlewares/user-check-middleware";
 import {BlogsService} from "../domain/blogs-service";
-import {BlogsRepository} from "../repositories/blogs-repository";
-import {postsController} from "../composition-root";
+import {container} from "../composition-root";
+import {PostsController} from "./posts-controller";
 
+const postsController = container.resolve(PostsController)
+const blogsService = container.resolve(BlogsService)
 
 export const postsRouter = Router({})
 
@@ -29,10 +31,6 @@ export const contentValidation = body('content')
 export const blogIdValidation = body('blogId')
     .exists({checkFalsy: true})
     .custom(async (blogId, ) => {
-        //todo how it's better to deal with blogService instance (postRouter)
-        let blogsRepository = new BlogsRepository();
-        let blogsService = new BlogsService(blogsRepository)
-
         const blogger = await blogsService.getBlogById(blogId)
 
         if (!blogger) {

@@ -2,7 +2,10 @@ import {Router} from "express";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {body} from "express-validator";
-import {usersController} from "../composition-root";
+import {container} from "../composition-root";
+import {UsersController} from "./users-controller";
+
+const usersController = container.resolve(UsersController)
 
 export const usersRouter = Router({})
 

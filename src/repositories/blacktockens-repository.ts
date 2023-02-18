@@ -1,7 +1,10 @@
 import {TokenType} from "../types/types";
 import {BlackTokenModelClass} from "./db";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlacktokensRepository {
+
     async addToList(token: TokenType): Promise<boolean> {
         const newBlackTokenInstance = new BlackTokenModelClass(token)
         await newBlackTokenInstance.save()
@@ -15,4 +18,5 @@ export class BlacktokensRepository {
     async deleteAll() {
         await BlackTokenModelClass.deleteMany({})
     }
+
 }

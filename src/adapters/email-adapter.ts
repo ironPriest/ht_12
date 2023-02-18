@@ -1,6 +1,9 @@
 import nodemailer from "nodemailer";
+import {injectable} from "inversify";
 
+@injectable()
 export class EmailAdapter {
+
     async sendEmail(email: string, subject: string, code: string) {
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
@@ -26,6 +29,7 @@ export class EmailAdapter {
         });
         return info
     }
+
     async passwordRecovery(email: string, subject: string, code: string) {
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
@@ -51,4 +55,5 @@ export class EmailAdapter {
         });
         return info
     }
+
 }

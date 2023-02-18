@@ -3,12 +3,14 @@ import {CommentsRepository} from "../repositories/comments-repository";
 import {UsersRepository} from "../repositories/users-repository";
 import {CommentType, UserType} from "../types/types";
 import {v4} from "uuid";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class CommentsService {
 
     constructor(
-        protected usersRepository: UsersRepository,
-        protected commentsRepository: CommentsRepository
+        @inject(UsersRepository) protected usersRepository: UsersRepository,
+        @inject(CommentsRepository) protected commentsRepository: CommentsRepository
     ) {
     }
 
