@@ -1,8 +1,8 @@
-import {PostsService} from "../domain/posts-service";
+import {PostsService} from "../application/posts-service";
 import {CommentsService} from "../domain/comments-service";
 import {Request, Response} from "express";
-import {PostModelClass} from "../repositories/db";
 import {inject, injectable} from "inversify";
+import {PostModelClass} from "../domain/PostSchema";
 
 @injectable()
 export class PostsController {
@@ -71,8 +71,8 @@ export class PostsController {
         } else {
             res.status(400).json({
                 errorsMessages: [{
-                    "message": "no such bloggerId!!",
-                    "field": "bloggerId"
+                    "message": "no such blogId!!",
+                    "field": "blogId"
                 }]
             })
         }

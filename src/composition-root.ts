@@ -5,7 +5,7 @@ import {BlogsRepository} from "./repositories/blogs-repository";
 import {BlogsService} from "./domain/blogs-service";
 
 import {PostsRepository} from "./repositories/posts-repository";
-import {PostsService} from "./domain/posts-service";
+import {PostsService} from "./application/posts-service";
 import {PostsController} from "./routes/posts-controller";
 
 import {CommentsRepository} from "./repositories/comments-repository";

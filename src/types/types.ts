@@ -1,4 +1,5 @@
 import {ObjectId} from 'mongodb'
+import {ExtendedLikesInfoSchema} from "../domain/extended-likes-info-schema";
 
 export class BlogType {
     constructor(
@@ -21,7 +22,8 @@ export class PostType {
         public content: string,
         public blogId: string,
         public blogName: string,
-        public createdAt: string
+        public createdAt: string,
+        public extendedLikesInfo: ExtendedLikesInfo
     ) {
     }
 }
@@ -115,6 +117,16 @@ export class LikeStatus {
         public userId: string,
         public commentId: string,
         public likeStatus: string
+    ) {
+    }
+}
+
+export class ExtendedLikesInfo {
+    constructor(
+        public likesCount: number,
+        public dislikesCount: number,
+        public myStatus: string,
+        public newestLikes: []
     ) {
     }
 }

@@ -1,6 +1,7 @@
 import {injectable} from "inversify";
 import {PostType} from "../types/types";
-import {PostModelClass} from "./db";
+import {PostMethodType, PostModelClass} from "../domain/PostSchema";
+import {HydratedDocument} from "mongoose";
 
 @injectable()
 export class PostsRepository {
@@ -85,6 +86,11 @@ export class PostsRepository {
         await postInstance.deleteOne()
 
         return true
+    }
+
+    async save(newPost: HydratedDocument<PostType, PostMethodType>): Promise<HydratedDocument<PostType, PostMethodType>> {
+        await newPost.save()
+        return newPost
     }
 
     async deleteAll() {

@@ -5,13 +5,14 @@ import {injectable} from "inversify";
 
 @injectable()
 export class UsersRepository {
+
     async create(newUser: UserType): Promise<UserType> {
 
         const newUserInstance = new UserModelClass(newUser)
 
         await newUserInstance.save()
 
-        return newUser
+        return newUserInstance
     }
 
     async newPassword(id: string, passwordHash: string) {
@@ -26,7 +27,7 @@ export class UsersRepository {
     }
 
     async findByLoginOrEmail(loginOrEmail: string) {
-        return UserModelClass.findOne({ $or: [{email: loginOrEmail}, {login: loginOrEmail}]}).lean()
+        return UserModelClass.findOne({ $or: [{email: loginOrEmail}, {login: loginOrEmail}]})
     }
 
     async findById(id: ObjectId) {

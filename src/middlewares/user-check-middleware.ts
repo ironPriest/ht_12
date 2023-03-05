@@ -9,32 +9,10 @@ import {RecoveryCodesRepository} from "../repositories/recovery-codes-repository
 import {EmailAdapter} from "../adapters/email-adapter";
 import {EmailManager} from "../managers/email-manager";
 import {EmailService} from "../domain/email-service";
+import {container} from "../composition-root";
 
-//todo composition-root duplication
-const blackTokensRepository = new BlacktokensRepository()
-const usersRepository = new UsersRepository()
-const emailConfirmationRepository = new EmailconfirmationRepository()
-const recoveryCodesRepository = new RecoveryCodesRepository()
-const emailAdapter = new EmailAdapter()
-const emailManager = new EmailManager(
-    emailAdapter
-)
-const emailService = new EmailService(
-    emailManager
-)
-const authService = new AuthService(
-    usersRepository,
-    emailConfirmationRepository,
-    recoveryCodesRepository,
-    emailService
-)
-const usersService = new UsersService(
-    usersRepository,
-    authService
-)
-const jwtUtility = new JwtUtility(
-    blackTokensRepository
-)
+const jwtUtility = container.resolve(JwtUtility)
+const usersService = container.resolve(UsersService)
 
 export const userCheckMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {

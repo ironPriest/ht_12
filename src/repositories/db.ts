@@ -1,17 +1,19 @@
 import {ObjectId} from 'mongodb'
-import mongoose from 'mongoose'
+import mongoose, {HydratedDocument, Model} from 'mongoose'
 import {
     BlogType,
-    PostType,
-    UserType,
     CommentType,
-    EmailConfirmationType,
-    TokenType,
     DeviceAuthSessionType,
+    EmailConfirmationType,
+    LikeStatus,
+    RecoveryCodeType,
     TimeStampType,
-    RecoveryCodeType, LikeStatus
+    TokenType,
+    UserType
 } from '../types/types'
+import {v4} from "uuid";
 
+mongoose.set('strictQuery', true)
 //const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017"
 const mongoForMongooseUri = process.env.mongoForMongooseURI || "mongodb://0.0.0.0:27017/testDB"
 
@@ -22,33 +24,40 @@ const mongoForMongooseUri = process.env.mongoForMongooseURI || "mongodb://0.0.0.
 
 //export const RecoveryCodeModelClass = db.collection<RecoveryCodeType>('recoveryCodes')
 
-const BlogSchema = new mongoose.Schema<BlogType>({
+//todo --> move model logic to entity file
+export type BlogMethodType = {
+    caseInsRegexQuery: (code: string) => BlogType
+}
+type BlogModelType = Model<BlogType, {}, BlogMethodType>
+type BlogModelStaticType = Model<BlogType> & {
+    makeInstance(name: string, websiteUrl: string, description: string): HydratedDocument<BlogType, BlogMethodType>
+}
+type BlogModelFullType = BlogModelType & BlogModelStaticType
+
+const BlogSchema = new mongoose.Schema<BlogType, BlogModelFullType>({
     id: {type: String, required: true},
     name: {type: String, required: true},
     websiteUrl: {type: String, required: true},
     description: {type: String, required: true},
     createdAt: {type: Date, required: true}
-}
-//todo instance method for case insensitive regex query
-/*,
-    {methods: {
-        caseInsRegexQuery(searchTerm) {
-            return mongoose.model('blogs').find({name: {$regex: searchTerm, $options: 'i'}})
-        }
-    }
-}*/)
-export const BlogModelClass = mongoose.model('blogs', BlogSchema)
-
-const PostSchema = new mongoose.Schema<PostType>({
-    id: {type: String, required: true},
-    title: {type: String, required: true},
-    shortDescription: {type: String, required: true},
-    content: {type: String, required: true},
-    blogId: {type: String, required: true},
-    blogName: {type: String, required: true},
-    createdAt: {type: String, required: true},
 })
-export const PostModelClass = mongoose.model('posts', PostSchema)
+BlogSchema.method('caseInsRegexQuery', function caseInsRegexQuery(searchTerm) {
+    return this.find({name: {$regex: searchTerm, $options: 'i'}})
+})
+BlogSchema.static('makeInstance', function makeInstance(
+    name: string,
+    websiteUrl: string,
+    description: string) {
+    return new BlogType(
+        new ObjectId(),
+        v4(),
+        name,
+        websiteUrl,
+        description,
+        new Date()
+    )
+})
+export const BlogModelClass = mongoose.model<BlogType, BlogModelFullType>('blogs', BlogSchema)
 
 const UserSchema = new mongoose.Schema<UserType>({
     id: {type: String, required: true},

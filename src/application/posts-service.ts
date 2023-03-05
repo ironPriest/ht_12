@@ -4,6 +4,8 @@ import {v4} from "uuid";
 import {ObjectId} from "mongodb";
 import {BlogsRepository} from "../repositories/blogs-repository";
 import {inject, injectable} from "inversify";
+import {PostMethodType, PostModelClass} from "../domain/PostSchema";
+import {HydratedDocument} from "mongoose";
 
 @injectable()
 export class PostsService {
@@ -38,7 +40,13 @@ export class PostsService {
                 content: post.content,
                 blogId: post.blogId,
                 blogName: post.blogName,
-                createdAt: post.createdAt
+                createdAt: post.createdAt,
+                extendedLikesInfo: {
+                    likesCount: post.extendedLikesInfo.likesCount,
+                    dislikesCount: post.extendedLikesInfo.dislikesCount,
+                    myStatus: post.extendedLikesInfo.myStatus,
+                    newestLikes: post.extendedLikesInfo.newestLikes
+                }
             }
         } else {
             return null
@@ -51,7 +59,7 @@ export class PostsService {
         const blog = await this.blogsRepository.getBlogById(blogId)
         if (!blog) return null
 
-        const post = new PostType(
+        /*const postDTO = new PostType(
             new ObjectId(),
             v4(),
             title,
@@ -59,10 +67,26 @@ export class PostsService {
             content,
             blogId,
             blog.name,
-            new Date().toISOString()
+            new Date().toISOString(),
+            {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None',
+                newestLikes: []
+            }
         )
 
-        const createdPost = await this.postsRepository.createPost(post)
+        const createdPost = await this.postsRepository.createPost(postDTO)*/
+
+        const newPost = PostModelClass.makeInstance(
+            title,
+            shortDescription,
+            content,
+            blogId,
+            blog.name
+        )
+
+        const createdPost = await this.postsRepository.save(newPost)
 
         if (createdPost) {
             return {
@@ -72,8 +96,15 @@ export class PostsService {
                 content: createdPost.content,
                 blogId: createdPost.blogId,
                 blogName: createdPost.blogName,
-                createdAt: createdPost.createdAt
-            }
+                createdAt: createdPost.createdAt,
+                extendedLikesInfo: {
+                    likesCount: createdPost.extendedLikesInfo.likesCount,
+                    dislikesCount: createdPost.extendedLikesInfo.dislikesCount,
+                    myStatus: createdPost.extendedLikesInfo.myStatus,
+                    newestLikes: createdPost.extendedLikesInfo.newestLikes
+                }
+        }
+
         } else {
             return null
         }

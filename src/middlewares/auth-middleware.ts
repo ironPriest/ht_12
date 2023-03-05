@@ -5,6 +5,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     if (userPassword === 'Basic YWRtaW46cXdlcnR5') {
         next()
     } else {
-        res.send(401)
+        res.sendStatus(401)
     }
 }

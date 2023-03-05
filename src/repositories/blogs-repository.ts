@@ -1,6 +1,7 @@
 import {injectable} from "inversify";
 import {BlogType} from "../types/types";
-import {BlogModelClass} from "./db";
+import {BlogMethodType, BlogModelClass} from "./db";
+import {HydratedDocument} from "mongoose";
 
 @injectable()
 export class BlogsRepository {
@@ -48,8 +49,8 @@ export class BlogsRepository {
         }
     }
 
-    async getBlogById(blogId: string): Promise<BlogType | null> {
-        return BlogModelClass.findOne({id: blogId}).lean()
+    async getBlogById(blogId: string): Promise<HydratedDocument<BlogType, BlogMethodType> | null> {
+        return BlogModelClass.findOne({id: blogId})
     }
 
     async createBlog(newBlog: BlogType): Promise<BlogType> {

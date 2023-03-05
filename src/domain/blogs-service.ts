@@ -3,6 +3,8 @@ import {ObjectId} from "mongodb";
 import {BlogsRepository} from "../repositories/blogs-repository"
 import {v4} from 'uuid';
 import {inject, injectable} from "inversify";
+import {BlogMethodType, BlogModelClass} from "../repositories/db";
+import {HydratedDocument} from "mongoose";
 
 @injectable()
 export class BlogsService {
@@ -27,15 +29,15 @@ export class BlogsService {
             sortDirection)
     }
 
-    async getBlogById(bloggerId: string): Promise<Omit<BlogType, '_id'> | null> {
-        let blogger: BlogType | null | void = await this.blogsRepository.getBlogById(bloggerId)
-        if (blogger) {
+    async getBlogById(blogId: string): Promise<Omit<BlogType, '_id'> | null> {
+        let blog: HydratedDocument<BlogType, BlogMethodType> | null = await this.blogsRepository.getBlogById(blogId)
+        if (blog) {
             return {
-                id: blogger.id,
-                name: blogger.name,
-                websiteUrl: blogger.websiteUrl,
-                createdAt: blogger.createdAt,
-                description: blogger.description
+                id: blog.id,
+                name: blog.name,
+                websiteUrl: blog.websiteUrl,
+                createdAt: blog.createdAt,
+                description: blog.description
             }
         } else {
             return null

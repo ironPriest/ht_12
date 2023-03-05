@@ -1,5 +1,5 @@
 import {inject, injectable} from "inversify";
-import {PostsService} from "../domain/posts-service";
+import {PostsService} from "../application/posts-service";
 import {BlogsService} from "../domain/blogs-service";
 import {Request, Response} from "express";
 import {BlogsRepository} from "../repositories/blogs-repository";
