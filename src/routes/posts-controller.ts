@@ -16,6 +16,10 @@ export class PostsController {
     }
 
     async updateLike(req: Request, res: Response) {
+
+        const post = await this.postsService.getPostById(req.params.postId)
+        if (!post) return res.sendStatus(404)
+
         const postLikeStatus = await this.postLikeStatusService.checkExistence(req.user.id, req.params.postId)
         if (!postLikeStatus) {
             const creationResult = await this.postLikeStatusService.create(req.user.id, req.params.posttId)
