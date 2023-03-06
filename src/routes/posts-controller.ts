@@ -99,12 +99,10 @@ export class PostsController {
     }
 
     async getPost(req: Request, res: Response) {
-        const post = await this.postsService.getPostById(req.params.postId)
+        const post = await this.postsService.getPostById(req.params.id)
         if (post) {
-            res.send(post)
-        } else {
-            res.send(404)
-        }
+            res.status(200).send(post)
+        } else return res.sendStatus(404)
     }
 
     async updatePost(req: Request, res: Response) {
