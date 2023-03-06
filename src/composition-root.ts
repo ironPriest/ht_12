@@ -39,6 +39,8 @@ import {SecurityDevicesController} from "./routes/security-devices-controller";
 import {TimeStampsRepository} from "./repositories/time-stamps-repository";
 
 import {TestingController} from "./routes/testing-controller";
+import {PostLikeStatusService} from "./application/post-like-status-srvice";
+import {PostLikeStatusRepository} from "./repositories/post-like-staus-repository";
 
 // const blogsRepository = new BlogsRepository()
 // const postsRepository = new PostsRepository()
@@ -151,6 +153,9 @@ container.bind(UsersRepository).to(UsersRepository)
 
 container.bind(LikeStatusesService).to(LikeStatusesService)
 container.bind(LikeStatusesRepository).to(LikeStatusesRepository)
+
+container.bind(PostLikeStatusService).to(PostLikeStatusService)
+container.bind(PostLikeStatusRepository).to(PostLikeStatusRepository)
 
 container.bind(AuthController).to(AuthController)
 container.bind(AuthService).to(AuthService)

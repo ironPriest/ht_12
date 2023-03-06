@@ -45,6 +45,11 @@ export const commentValidation = body('content')
     .isLength({min: 20})
     .isLength({max: 300})
 
+postsRouter.put(
+    ':postId/like-status',
+    bearerAuthMiddleware,
+    postsController.updateLike.bind(postsController)
+)
 postsRouter.get(
     '/:postId/comments',
     userCheckMiddleware,

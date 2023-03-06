@@ -3,14 +3,29 @@ import {CommentsService} from "../domain/comments-service";
 import {Request, Response} from "express";
 import {inject, injectable} from "inversify";
 import {PostModelClass} from "../domain/PostSchema";
+import {PostLikeStatusService} from "../application/post-like-status-srvice";
 
 @injectable()
 export class PostsController {
 
     constructor(
         @inject(PostsService) protected postsService: PostsService,
-        @inject(CommentsService) protected commentsService: CommentsService
+        @inject(CommentsService) protected commentsService: CommentsService,
+        @inject(PostLikeStatusService) protected postLikeStatusService: PostLikeStatusService
     ) {
+    }
+
+    async updateLike(req: Request, res: Response) {
+        const postLikeStatus = await this.postLikeStatusService.checkExistence(req.user.id, req.params.postId)
+        if (!postLikeStatus) {
+            const creationResult = await this.postLikeStatusService.create(req.user.id, req.params.posttId)
+            if (!creationResult) return res.sendStatus(400)
+            return res.sendStatus(204)
+        } else {
+            const updateResult = await this.postLikeStatusService.update(req.user.id, req.params.postId, req.body.likeStatus)
+            if (!updateResult) return res.sendStatus(400)
+            return res.sendStatus(204)
+        }
     }
 
     async getPostComments(req: Request, res: Response) {

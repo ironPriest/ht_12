@@ -130,3 +130,14 @@ export class ExtendedLikesInfo {
     ) {
     }
 }
+
+export class PostLikeStatus {
+    constructor(
+        public _id: ObjectId,
+        public userId: string,
+        public postId: string,
+        public likeStatus: string,
+        public createdAt: string
+    ) {
+    }
+}
