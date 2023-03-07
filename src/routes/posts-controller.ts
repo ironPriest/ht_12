@@ -22,7 +22,7 @@ export class PostsController {
 
         const postLikeStatus = await this.postLikeStatusService.checkExistence(req.user.id, req.params.postId)
         if (!postLikeStatus) {
-            const creationResult = await this.postLikeStatusService.create(req.user.id, req.params.posttId)
+            const creationResult = await this.postLikeStatusService.create(req.user.id, req.params.postId)
             if (!creationResult) return res.sendStatus(400)
             return res.sendStatus(204)
         } else {

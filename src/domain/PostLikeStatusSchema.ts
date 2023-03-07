@@ -30,8 +30,8 @@ PostLikeStatusSchema.static('makeInstance', function makeInstance(
 ) {
     return new PostLikeStatusModel({
         _id: new ObjectId(),
-        userId,
-        postId,
+        userId: userId,
+        postId: postId,
         likeStatus: 'None',
         createdAt: new Date().toISOString()
     })
