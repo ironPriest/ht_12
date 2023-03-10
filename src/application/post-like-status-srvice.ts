@@ -17,7 +17,7 @@ export class PostLikeStatusService {
         return await this.postLikeStatusRepository.getLikeStatus(userId, postId);
     }
 
-    async create(userId: string, postId: string): Promise<boolean> {
+    async create(userId: string, login: string, postId: string): Promise<boolean> {
 
         /*const newLikeStatus = new LikeStatus(
             new ObjectId(),
@@ -28,7 +28,7 @@ export class PostLikeStatusService {
 
         return await this.likeStatusesRepository.create(newLikeStatus)*/
 
-        const likeStatusEntity = PostLikeStatusModel.makeInstance(userId, postId)
+        const likeStatusEntity = PostLikeStatusModel.makeInstance(userId, login, postId)
 
         return await this.postLikeStatusRepository.save(likeStatusEntity)
     }

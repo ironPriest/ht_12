@@ -9,6 +9,7 @@ type PostLikeModelType = Model<PostLikeStatus, {}, PostLikeMethodType>
 type PostLikeModelStaticType = Model<PostLikeStatus> & {
     makeInstance(
         userId: string,
+        login: string,
         postId: string,
     ): HydratedDocument<PostLikeStatus, PostLikeMethodType>
 }
@@ -16,9 +17,10 @@ type PostLikeModelFullType = PostLikeModelType & PostLikeModelStaticType
 
 const PostLikeStatusSchema = new mongoose.Schema<PostLikeStatus>({
     userId: {type: String, required: true},
+    login: {type: String, required: true},
     postId: {type: String, required: true},
     likeStatus: {type: String, required: true},
-    createdAt: {type: String, required: true}
+    addedAt: {type: String, required: true}
 })
 PostLikeStatusSchema.method('updateLike', function updateLike(likeStatus) {
     this.likeStatus = likeStatus
@@ -26,11 +28,13 @@ PostLikeStatusSchema.method('updateLike', function updateLike(likeStatus) {
 })
 PostLikeStatusSchema.static('makeInstance', function makeInstance(
     userId: string,
+    login: string,
     postId: string,
 ) {
     return new PostLikeStatusModel({
         _id: new ObjectId(),
         userId: userId,
+        login: login,
         postId: postId,
         likeStatus: 'None',
         createdAt: new Date().toISOString()

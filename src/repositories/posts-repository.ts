@@ -43,9 +43,8 @@ export class PostsRepository {
         }
     }
 
-    //todo what better: id vs postId
-    async getPostById(postId: string): Promise<PostType | null> {
-        return PostModelClass.findOne({id: postId}).lean()
+    async getPostById(postId: string): Promise<HydratedDocument<PostType, PostMethodType> | null> {
+        return PostModelClass.findOne({id: postId})
     }
 
     async createPost(post: PostType): Promise<PostType | null> {

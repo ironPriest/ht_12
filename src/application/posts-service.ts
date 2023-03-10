@@ -31,26 +31,29 @@ export class PostsService {
     }
 
     async getPostById(postId: string): Promise<Omit<PostType, '_id'> | null> {
-        let post: PostType | null = await this.postsRepository.getPostById(postId)
-        if (post) {
-            return {
-                id: post.id,
-                title: post.title,
-                shortDescription: post.shortDescription,
-                content: post.content,
-                blogId: post.blogId,
-                blogName: post.blogName,
-                createdAt: post.createdAt,
-                extendedLikesInfo: {
-                    likesCount: post.extendedLikesInfo.likesCount,
-                    dislikesCount: post.extendedLikesInfo.dislikesCount,
-                    myStatus: post.extendedLikesInfo.myStatus,
-                    newestLikes: post.extendedLikesInfo.newestLikes
-                }
+
+        let post = await this.postsRepository.getPostById(postId)
+        if (!post) return null
+
+        /*return {
+            id: post.id,
+            title: post.title,
+            shortDescription: post.shortDescription,
+            content: post.content,
+            blogId: post.blogId,
+            blogName: post.blogName,
+            createdAt: post.createdAt,
+            extendedLikesInfo: {
+                likesCount: post.extendedLikesInfo.likesCount,
+                dislikesCount: post.extendedLikesInfo.dislikesCount,
+                myStatus: post.extendedLikesInfo.myStatus,
+                newestLikes: post.extendedLikesInfo.newestLikes
             }
-        } else {
-            return null
-        }
+        }*/
+
+        await post.process(postId)
+
+        return post
 
     }
 

@@ -22,7 +22,11 @@ export class PostsController {
 
         const postLikeStatus = await this.postLikeStatusService.checkExistence(req.user.id, req.params.postId)
         if (!postLikeStatus) {
-            const creationResult = await this.postLikeStatusService.create(req.user.id, req.params.postId)
+            const creationResult = await this.postLikeStatusService.create(
+                req.user.id,
+                req.user.login,
+                req.params.postId
+            )
             if (!creationResult) return res.sendStatus(400)
             return res.sendStatus(204)
         } else {
@@ -99,10 +103,12 @@ export class PostsController {
     }
 
     async getPost(req: Request, res: Response) {
+
         const post = await this.postsService.getPostById(req.params.id)
-        if (post) {
-            res.status(200).send(post)
-        } else return res.sendStatus(404)
+        if (!post) return res.sendStatus(404)
+
+        res.status(200).send(post)
+
     }
 
     async updatePost(req: Request, res: Response) {

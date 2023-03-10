@@ -135,9 +135,10 @@ export class PostLikeStatus {
     constructor(
         public _id: ObjectId,
         public userId: string,
+        public login: string,
         public postId: string,
         public likeStatus: string,
-        public createdAt: string
+        public addedAt: string
     ) {
     }
 }

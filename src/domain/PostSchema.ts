@@ -1,11 +1,16 @@
 import mongoose, {HydratedDocument, Model} from "mongoose";
-import {PostType} from "../types/types";
+import {PostLikeStatus, PostType} from "../types/types";
 import {ExtendedLikesInfoSchema} from "./extended-likes-info-schema";
 import {ObjectId} from "mongodb";
 import {v4} from "uuid";
+import {container} from "../composition-root";
+import {PostLikeStatusRepository} from "../repositories/post-like-staus-repository";
+import {PostLikeStatusModel} from "./PostLikeStatusSchema";
+
+const postLikeStatusRepository = container.resolve(PostLikeStatusRepository)
 
 export type PostMethodType = {
-
+    process: (code: string) => PostType
 }
 type PostModelType = Model<PostType, {}, PostMethodType>
 type PostModelStaticType = Model<PostType> & {
@@ -29,6 +34,28 @@ const PostSchema = new mongoose.Schema<PostType, PostModelFullType, PostMethodTy
     createdAt: {type: String, required: true},
     extendedLikesInfo: {type: ExtendedLikesInfoSchema, required: true}
 })
+
+PostSchema.method('process', async function process(userId, postId) {
+
+    this.extendedLikesInfo.likesCount = await postLikeStatusRepository.likesCount(postId)
+    this.extendedLikesInfo.dislikesCount = await postLikeStatusRepository.dislikesCount(postId)
+
+    const postLikeStatus: PostLikeStatus = await PostLikeStatusModel.
+        findOne().
+        where('userId').equals(userId).
+        where('commentId').equals(postId).
+        lean()
+    this.extendedLikesInfo.myStatus = postLikeStatus.likeStatus
+
+    this.extendedLikesInfo.newestLikes = await PostLikeStatusModel.
+        find().
+        where('postId').equals(postId).
+        sort('addedAt').
+        limit(3).
+        lean()
+
+})
+
 PostSchema.static('makeInstance', function makeInstance(
     title: string,
     shortDescription: string,

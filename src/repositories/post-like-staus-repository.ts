@@ -23,4 +23,12 @@ export class PostLikeStatusRepository {
         return true
     }
 
+    async likesCount(postId: string): Promise<number> {
+        return PostLikeStatusModel.count({postId, likeStatus: 'Like'}).lean()
+    }
+
+    async dislikesCount(postId: string): Promise<number> {
+        return PostLikeStatusModel.count({postId, likeStatus: 'Dislike'}).lean()
+    }
+
 }
