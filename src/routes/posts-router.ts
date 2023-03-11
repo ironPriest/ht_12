@@ -78,7 +78,7 @@ postsRouter.post(
 )
 postsRouter.get(
     '/:id',
-    //userCheckMiddleware,
+    userCheckMiddleware,
     postsController.getPost.bind(postsController)
 )
 
