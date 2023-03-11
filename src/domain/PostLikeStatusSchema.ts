@@ -37,7 +37,7 @@ PostLikeStatusSchema.static('makeInstance', function makeInstance(
         login: login,
         postId: postId,
         likeStatus: 'None',
-        createdAt: new Date().toISOString()
+        addedAt: new Date().toISOString()
     })
 })
 
