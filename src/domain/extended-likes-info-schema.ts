@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {ExtendedLikesInfo} from "../types/types";
+import {ExtendedLikesInfo, PostLikeStatus} from "../types/types";
 
 export const ExtendedLikesInfoSchema = new mongoose.Schema<ExtendedLikesInfo>({
     likesCount: {type:Number, required: true},

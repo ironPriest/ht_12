@@ -1,4 +1,4 @@
-import {PostType} from "../types/types";
+import {PostLikeStatus, PostType} from "../types/types";
 import {PostsRepository} from "../repositories/posts-repository";
 import {v4} from "uuid";
 import {ObjectId} from "mongodb";
@@ -6,13 +6,16 @@ import {BlogsRepository} from "../repositories/blogs-repository";
 import {inject, injectable} from "inversify";
 import {PostMethodType, PostModelClass} from "../domain/PostSchema";
 import {HydratedDocument} from "mongoose";
+import {PostLikeStatusRepository} from "../repositories/post-like-staus-repository";
+import {PostLikeMethodType} from "../domain/PostLikeStatusSchema";
 
 @injectable()
 export class PostsService {
 
     constructor(
         @inject(BlogsRepository) protected blogsRepository: BlogsRepository,
-        @inject(PostsRepository) protected postsRepository: PostsRepository
+        @inject(PostsRepository) protected postsRepository: PostsRepository,
+        @inject(PostLikeStatusRepository) protected postLikeStatusRepository: PostLikeStatusRepository
     ) {
     }
 
@@ -30,7 +33,7 @@ export class PostsService {
             sortDirection)
     }
 
-    async getPostById(postId: string): Promise<Omit<PostType, '_id'> | null> {
+    async getPostById(userId: string, postId: string): Promise<Omit<PostType, '_id'> | null> {
 
         let post = await this.postsRepository.getPostById(postId)
         if (!post) return null
@@ -51,7 +54,25 @@ export class PostsService {
             }
         }*/
 
-        await post.process(postId)
+        //await post.process(postId)
+
+        const likesCount = await this.postLikeStatusRepository.likesCount(postId)
+        const dislikesCount = await this.postLikeStatusRepository.dislikesCount(postId)
+
+        let myStatus = 'None'
+        if(userId) {
+            const likeStatus: PostLikeStatus | null = await this.postLikeStatusRepository.getLikeStatus(userId, postId)
+            if (likeStatus) {
+                myStatus = likeStatus.likeStatus
+            }
+        }
+
+        const newestLikes = await this.postLikeStatusRepository.getNewestLikes(postId)
+
+        post.extendedLikesInfo.likesCount = likesCount
+        post.extendedLikesInfo.dislikesCount = dislikesCount
+        post.extendedLikesInfo.myStatus = myStatus
+        post.extendedLikesInfo.newestLikes = newestLikes
 
         return post
 

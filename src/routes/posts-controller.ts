@@ -17,7 +17,7 @@ export class PostsController {
 
     async updateLike(req: Request, res: Response) {
 
-        const post = await this.postsService.getPostById(req.params.postId)
+        const post = await this.postsService.getPostById(req.user.id, req.params.postId)
         if (!post) return res.sendStatus(404)
 
         const postLikeStatus = await this.postLikeStatusService.checkExistence(req.user.id, req.params.postId)
@@ -37,7 +37,7 @@ export class PostsController {
     }
 
     async getPostComments(req: Request, res: Response) {
-        const post = await this.postsService.getPostById(req.params.postId)
+        const post = await this.postsService.getPostById(req.user?.id, req.params.postId)
         if (!post) {
             res.sendStatus(404)
         } else {
@@ -57,7 +57,7 @@ export class PostsController {
     }
 
     async createComment(req: Request, res: Response) {
-        const post = await this.postsService.getPostById(req.params.postId)
+        const post = await this.postsService.getPostById(req.user.id, req.params.postId)
         if (!post) {
             res.sendStatus(404)
         } else {
@@ -104,7 +104,7 @@ export class PostsController {
 
     async getPost(req: Request, res: Response) {
 
-        const post = await this.postsService.getPostById(req.params.id)
+        const post = await this.postsService.getPostById(req.user?.id, req.params.id)
         if (!post) return res.sendStatus(404)
 
         res.status(200).send(post)

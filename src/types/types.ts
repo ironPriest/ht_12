@@ -126,7 +126,7 @@ export class ExtendedLikesInfo {
         public likesCount: number,
         public dislikesCount: number,
         public myStatus: string,
-        public newestLikes: []
+        public newestLikes: PostLikeStatus[]
     ) {
     }
 }

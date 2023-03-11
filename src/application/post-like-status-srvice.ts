@@ -1,9 +1,7 @@
 import {inject, injectable} from "inversify";
 import {PostLikeStatus} from "../types/types";
 import {PostLikeStatusRepository} from "../repositories/post-like-staus-repository";
-import {PostLikeMethodType, PostLikeStatusModel} from "../domain/PostLikeStatusSchema";
-import * as cluster from "cluster";
-import {HydratedDocument} from "mongoose";
+import {PostLikeStatusModel} from "../domain/PostLikeStatusSchema";
 
 @injectable()
 export class PostLikeStatusService {
@@ -13,7 +11,7 @@ export class PostLikeStatusService {
     ) {
     }
 
-    async checkExistence(userId: string, postId: string): Promise<HydratedDocument<PostLikeStatus, PostLikeMethodType> | null> {
+    async checkExistence(userId: string, postId: string): Promise<PostLikeStatus | null> {
         return await this.postLikeStatusRepository.getLikeStatus(userId, postId);
     }
 

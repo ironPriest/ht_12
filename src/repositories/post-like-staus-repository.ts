@@ -31,4 +31,13 @@ export class PostLikeStatusRepository {
         return PostLikeStatusModel.count({postId, likeStatus: 'Dislike'}).lean()
     }
 
+    async getNewestLikes(postId: string): Promise<PostLikeStatus[]> {
+        return PostLikeStatusModel.
+        find().
+        where('postId').equals(postId).
+        sort('addedAt').
+        limit(3).
+        lean()
+    }
+
 }
