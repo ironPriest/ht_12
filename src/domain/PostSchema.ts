@@ -1,5 +1,5 @@
 import mongoose, {HydratedDocument, Model} from "mongoose";
-import {PostLikeStatus, PostType} from "../types/types";
+import {PostType} from "../types/types";
 import {ExtendedLikesInfoSchema} from "./extended-likes-info-schema";
 import {ObjectId} from "mongodb";
 import {v4} from "uuid";

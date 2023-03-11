@@ -44,7 +44,10 @@ export class PostsRepository {
     }
 
     async getPostById(postId: string): Promise<HydratedDocument<PostType, PostMethodType> | null> {
-        return PostModelClass.findOne({id: postId})
+        return PostModelClass.
+            findOne({id: postId}).
+            where('id').equals(postId).
+            select('-__v -_id -extendedLikesInfo._id')
     }
 
     async createPost(post: PostType): Promise<PostType | null> {
