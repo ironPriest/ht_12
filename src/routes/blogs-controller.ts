@@ -37,23 +37,23 @@ export class BlogsController {
     }
 
     async getBlogPosts(req: Request, res: Response) {
+
         let blog = await this.blogsService.getBlogById(req.params.blogId)
-        if (blog) {
-            const pageNumber = req.query.pageNumber ? +req.query.pageNumber : 1
-            const pageSize = req.query.pageSize ? +req.query.pageSize : 10
-            const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
-            const sortDirection = req.query.sortDirection ? req.query.sortDirection.toString() : 'Desc'
-            const posts = await this.postsService.getPosts(
-                req.params.blogId,
-                pageNumber,
-                pageSize,
-                sortBy,
-                sortDirection,
-                req.user?.id)
-            res.send(posts)
-        } else {
-            res.send(404)
-        }
+        if (!blog) return res.sendStatus(404)
+
+        const pageNumber = req.query.pageNumber ? +req.query.pageNumber : 1
+        const pageSize = req.query.pageSize ? +req.query.pageSize : 10
+        const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
+        const sortDirection = req.query.sortDirection ? req.query.sortDirection.toString() : 'Desc'
+        const posts = await this.postsService.getPosts(
+            req.params.blogId,
+            pageNumber,
+            pageSize,
+            sortBy,
+            sortDirection,
+            req.user?.id)
+        res.send(posts)
+
     }
 
     async createBlogPost(req: Request, res: Response) {

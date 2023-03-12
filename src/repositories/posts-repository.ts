@@ -31,16 +31,19 @@ export class PostsRepository {
                 break
         }
 
+        let filter = {}
+        if (blogId) filter = {blogId: blogId}
+
         let query = PostModelClass.
-        find().
+        find(filter).
         select('-__v -_id -extendedLikesInfo._id').
         sort(sortFilter).
         skip((pageNumber - 1) * pageSize).
         limit(pageSize)
 
-        if (blogId) {
+        /*if (blogId) {
             query = query.find({blogId})
-        }
+        }*/
 
         let queryRes = await query.lean()
 
