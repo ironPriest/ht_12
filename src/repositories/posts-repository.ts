@@ -36,18 +36,17 @@ export class PostsRepository {
 
         console.log('--blogId-- --filter-- -->', blogId, filter)
 
-        let query = PostModelClass.
+        let queryRes = await PostModelClass.
         find(filter).
         select('-__v -_id -extendedLikesInfo._id').
         sort(sortFilter).
         skip((pageNumber - 1) * pageSize).
-        limit(pageSize)
+        limit(pageSize).
+        lean()
 
         /*if (blogId) {
             query = query.find({blogId})
         }*/
-
-        let queryRes = await query.lean()
 
         const mappedPosts = await Promise.all(queryRes.map(async post => {
             post.extendedLikesInfo.likesCount = await this.postLikeStatusRepository.likesCount(post.id)
