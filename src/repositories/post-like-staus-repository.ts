@@ -35,6 +35,8 @@ export class PostLikeStatusRepository {
         return PostLikeStatusModel.
         find().
         where('postId').equals(postId).
+        where('likeStatus').equals('Like').
+        select('-__v -_id -likeStatus -postId').
         sort('addedAt').
         limit(3).
         lean()
