@@ -24,37 +24,22 @@ export class PostsService {
         pageNumber: number,
         pageSize: number,
         sortBy: string,
-        sortDirection: string) {
+        sortDirection: string,
+        userId: string | undefined) {
         return await this.postsRepository.getPosts(
             blogId,
             pageNumber,
             pageSize,
             sortBy,
-            sortDirection)
+            sortDirection,
+            userId
+        )
     }
 
     async getPostById(userId: string, postId: string): Promise<Omit<PostType, '_id'> | null> {
 
         let post = await this.postsRepository.getPostById(postId)
         if (!post) return null
-
-        /*return {
-            id: post.id,
-            title: post.title,
-            shortDescription: post.shortDescription,
-            content: post.content,
-            blogId: post.blogId,
-            blogName: post.blogName,
-            createdAt: post.createdAt,
-            extendedLikesInfo: {
-                likesCount: post.extendedLikesInfo.likesCount,
-                dislikesCount: post.extendedLikesInfo.dislikesCount,
-                myStatus: post.extendedLikesInfo.myStatus,
-                newestLikes: post.extendedLikesInfo.newestLikes
-            }
-        }*/
-
-        //await post.process(postId)
 
         const likesCount = await this.postLikeStatusRepository.likesCount(postId)
         const dislikesCount = await this.postLikeStatusRepository.dislikesCount(postId)
@@ -82,25 +67,6 @@ export class PostsService {
 
         const blog = await this.blogsRepository.getBlogById(blogId)
         if (!blog) return null
-
-        /*const postDTO = new PostType(
-            new ObjectId(),
-            v4(),
-            title,
-            shortDescription,
-            content,
-            blogId,
-            blog.name,
-            new Date().toISOString(),
-            {
-                likesCount: 0,
-                dislikesCount: 0,
-                myStatus: 'None',
-                newestLikes: []
-            }
-        )
-
-        const createdPost = await this.postsRepository.createPost(postDTO)*/
 
         const newPost = PostModelClass.makeInstance(
             title,

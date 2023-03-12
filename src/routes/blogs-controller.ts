@@ -48,7 +48,8 @@ export class BlogsController {
                 pageNumber,
                 pageSize,
                 sortBy,
-                sortDirection)
+                sortDirection,
+                req.user?.id)
             res.send(posts)
         } else {
             res.send(404)

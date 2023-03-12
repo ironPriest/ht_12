@@ -80,7 +80,8 @@ export class PostsController {
             pageNumber,
             pageSize,
             sortBy,
-            sortDirection)
+            sortDirection,
+            req.user?.id)
         res.send(posts)
     }
 

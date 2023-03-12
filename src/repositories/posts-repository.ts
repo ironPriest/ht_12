@@ -1,17 +1,25 @@
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import {PostType} from "../types/types";
 import {PostMethodType, PostModelClass} from "../domain/PostSchema";
 import {HydratedDocument} from "mongoose";
+import {PostLikeStatusRepository} from "./post-like-staus-repository";
 
 @injectable()
 export class PostsRepository {
+
+    constructor(
+        @inject(PostLikeStatusRepository) protected postLikeStatusRepository: PostLikeStatusRepository
+    ) {
+    }
 
     async getPosts(
         blogId: string | null,
         pageNumber: number,
         pageSize: number,
         sortBy: string,
-        sortDirection: string) {
+        sortDirection: string,
+        userId: string | undefined
+    ) {
 
         let totalCount = await PostModelClass.count()
         let pageCount = Math.ceil(+totalCount / pageSize)
@@ -25,7 +33,7 @@ export class PostsRepository {
 
         let query = PostModelClass.
         find().
-        select('-_id').
+        select('-__v -_id -extendedLikesInfo._id').
         sort(sortFilter).
         skip((pageNumber - 1) * pageSize).
         limit(pageSize)
@@ -34,12 +42,31 @@ export class PostsRepository {
             query = query.find({blogId})
         }
 
+        let queryRes = await query.lean()
+
+        const mappedPosts = await Promise.all(queryRes.map(async post => {
+            post.extendedLikesInfo.likesCount = await this.postLikeStatusRepository.likesCount(post.id)
+            post.extendedLikesInfo.dislikesCount = await this.postLikeStatusRepository.dislikesCount(post.id)
+            post.extendedLikesInfo.myStatus = 'None'
+            if (userId) {
+                const likeStatus = await this.postLikeStatusRepository.getLikeStatus(userId, post.id)
+                if (likeStatus) {
+                    post.extendedLikesInfo.myStatus = likeStatus.likeStatus
+                }
+            }
+
+            const newestLikes = await this.postLikeStatusRepository.getNewestLikes(post.id)
+            post.extendedLikesInfo.newestLikes = newestLikes
+
+            return post
+        }))
+
         return {
             "pagesCount": pageCount,
             "page": pageNumber,
             "pageSize": pageSize,
             "totalCount": totalCount,
-            "items": await query
+            "items": mappedPosts
         }
     }
 

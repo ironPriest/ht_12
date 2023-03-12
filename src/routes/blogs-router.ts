@@ -6,6 +6,7 @@ import {body, param} from "express-validator";
 import {inputValidationMiddleware, requestsCounterMiddleware} from "../middlewares/input-validation-middleware";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {contentValidation, descValidation, titleValidation} from "./posts-router";
+import {userCheckMiddleware} from "../middlewares/user-check-middleware";
 
 const blogsController = container.resolve(BlogsController)
 const blogsService = container.resolve(BlogsService)
@@ -62,6 +63,7 @@ blogsRouter.post(
     contentValidation,
     bloggerIdValidation,
     inputValidationMiddleware,
+    userCheckMiddleware,
     blogsController.createBlogPost.bind(blogsController)
 )
 blogsRouter.get(

@@ -50,7 +50,7 @@ export class CommentsRepository {
             limit(pageSize).lean()
 
 
-        let mappedComments = await Promise.all(query.map(async  comment => {
+        let mappedComments = await Promise.all(query.map(async comment => {
             comment.likesInfo.likesCount = await this.likeStatusesRepository.likesCount(comment.id)
             comment.likesInfo.dislikesCount = await this.likeStatusesRepository.dislikesCount(comment.id)
             comment.likesInfo.myStatus = "None"

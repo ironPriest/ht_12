@@ -64,6 +64,7 @@ postsRouter.post(
 )
 postsRouter.get(
     '/',
+    userCheckMiddleware,
     postsController.getPosts.bind(postsController)
 )
 postsRouter.post(
