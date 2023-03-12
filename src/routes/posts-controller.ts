@@ -25,7 +25,8 @@ export class PostsController {
             const creationResult = await this.postLikeStatusService.create(
                 req.user.id,
                 req.user.login,
-                req.params.postId
+                req.params.postId,
+                req.body.likeStatus
             )
             if (!creationResult) return res.sendStatus(400)
             return res.sendStatus(204)

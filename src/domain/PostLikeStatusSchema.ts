@@ -11,6 +11,7 @@ type PostLikeModelStaticType = Model<PostLikeStatus> & {
         userId: string,
         login: string,
         postId: string,
+        likeStatus: string
     ): HydratedDocument<PostLikeStatus, PostLikeMethodType>
 }
 type PostLikeModelFullType = PostLikeModelType & PostLikeModelStaticType
@@ -30,13 +31,14 @@ PostLikeStatusSchema.static('makeInstance', function makeInstance(
     userId: string,
     login: string,
     postId: string,
+    likeStatus: string
 ) {
     return new PostLikeStatusModel({
         _id: new ObjectId(),
         userId: userId,
         login: login,
         postId: postId,
-        likeStatus: 'None',
+        likeStatus: likeStatus,
         addedAt: new Date().toISOString()
     })
 })
