@@ -34,6 +34,8 @@ export class PostsRepository {
         let filter = {}
         if (blogId) filter = {blogId: blogId}
 
+        console.log('--blogId-- --filter-- -->', blogId, filter)
+
         let query = PostModelClass.
         find(filter).
         select('-__v -_id -extendedLikesInfo._id').
