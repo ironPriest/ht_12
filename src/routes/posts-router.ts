@@ -7,7 +7,6 @@ import {userCheckMiddleware} from "../middlewares/user-check-middleware";
 import {BlogsService} from "../domain/blogs-service";
 import {container} from "../composition-root";
 import {PostsController} from "./posts-controller";
-import {likeValidation} from "./comments-router";
 
 const postsController = container.resolve(PostsController)
 const blogsService = container.resolve(BlogsService)
@@ -45,6 +44,9 @@ export const commentValidation = body('content')
     .isString()
     .isLength({min: 20})
     .isLength({max: 300})
+
+const likeValidation = body('likeStatus')
+    .exists({checkFalsy: true}).isIn(['None', 'Like', 'Dislike'])
 
 postsRouter.put(
     '/:postId/like-status',
