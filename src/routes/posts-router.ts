@@ -7,6 +7,7 @@ import {userCheckMiddleware} from "../middlewares/user-check-middleware";
 import {BlogsService} from "../domain/blogs-service";
 import {container} from "../composition-root";
 import {PostsController} from "./posts-controller";
+import {likeValidation} from "./comments-router";
 
 const postsController = container.resolve(PostsController)
 const blogsService = container.resolve(BlogsService)
@@ -48,6 +49,8 @@ export const commentValidation = body('content')
 postsRouter.put(
     '/:postId/like-status',
     bearerAuthMiddleware,
+    likeValidation,
+    inputValidationMiddleware,
     postsController.updateLike.bind(postsController)
 )
 postsRouter.get(

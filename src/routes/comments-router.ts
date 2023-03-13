@@ -11,7 +11,7 @@ const commentsController = container.resolve(CommentsController)
 
 export const commentsRouter = Router({})
 
-const likeValidation = body('likeStatus')
+export const likeValidation = body('likeStatus')
     .exists({checkFalsy: true}).isIn(['None', 'Like', 'Dislike'])
 
 commentsRouter
