@@ -53,6 +53,7 @@ blogsRouter.get(
     '/:blogId/posts',
     bloggerIdValidation,
     inputValidationMiddleware,
+    userCheckMiddleware,
     blogsController.getBlogPosts.bind(blogsController)
 )
 blogsRouter.post(
