@@ -31,13 +31,13 @@ export class PostsRepository {
                 break
         }
 
-        let filter = {}
+        /*let filter = {}
         if (blogId) filter = {blogId: blogId}
 
-        console.log('--blogId-- --filter-- -->', blogId, filter)
+        console.log('--blogId-- --filter-- -->', blogId, filter)*/
 
         let queryRes = await PostModelClass.
-        find(filter).
+        find({blogId: blogId}).
         select('-__v -_id -extendedLikesInfo._id').
         sort(sortFilter).
         skip((pageNumber - 1) * pageSize).
