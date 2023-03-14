@@ -21,7 +21,10 @@ export class PostsRepository {
         userId: string | undefined
     ) {
 
-        let totalCount = await PostModelClass.count()
+        let filter = {}
+        if (blogId) filter = {blogId: blogId}
+
+        let totalCount = await PostModelClass.count(filter)
         let pageCount = Math.ceil(+totalCount / pageSize)
         const sortFilter: any = {}
         switch (sortDirection) {
@@ -31,13 +34,8 @@ export class PostsRepository {
                 break
         }
 
-        /*let filter = {}
-        if (blogId) filter = {blogId: blogId}
-
-        console.log('--blogId-- --filter-- -->', blogId, filter)*/
-
         let queryRes = await PostModelClass.
-        find({blogId: blogId}).
+        find(filter).
         select('-__v -_id -extendedLikesInfo._id').
         sort(sortFilter).
         skip((pageNumber - 1) * pageSize).
